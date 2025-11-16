@@ -1,12 +1,11 @@
-html,
-body {
+html, body {
   margin: 0;
-  padding: 5;
+  padding: 0;
   height: 100%;
   width: 100%;
   display: flex;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
+  flex-direction: column; /* stack header, map, legend */
+  overflow: auto;
 }
 
 #map {
@@ -35,4 +34,34 @@ body {
   cursor: pointer; /* optional: shows hover */
 }
 
+#map circle,
+.legend > div {
+  --color-departures: steelblue;
+  --color-arrivals: darkorange;
+  --color: color-mix(
+    in oklch,
+    var(--color-departures) calc(100% * var(--departure-ratio)),
+    var(--color-arrivals)
+  );
+  fill: var(--color); /* works for circles */
+  background-color: var(--color); /* needed for legend divs */
+}
 
+.legend {
+  display: flex;
+  margin-block: 1em; /* spacing from map */
+  font-size: 0.9em;
+  text-align: center;
+  gap: 1px;
+}
+
+.legend > div {
+  flex: 1;
+  padding: 0.5em 1em;
+  color: white; /* text color for contrast */
+  font-weight: bold;
+  border-radius: 4px 0 0 4px; /* first swatch rounded left */
+}
+
+.legend > div:nth-child(2) { border-radius: 0; }
+.legend > div:last-child { border-radius: 0 4px 4px 0; }

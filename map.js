@@ -49,6 +49,8 @@ function filterTripsByTime(trips, timeFilter) {
   });
 }
 
+const stationFlow = d3.scaleQuantize().domain([0, 1]).range([0, 0.5, 1]);
+
 map.on('load', async () => {
   // --- Bike lane layers ---
   map.addSource('boston_route', {
@@ -81,7 +83,6 @@ map.on('load', async () => {
     return { x, y };
   }
 
-  // --- Load data ---
   const jsonData = await d3.json(
     'https://dsc106.com/labs/lab07/data/bluebikes-stations.json'
   );
@@ -109,11 +110,12 @@ map.on('load', async () => {
     .attr('class', 'station-tooltip')
     .style('position', 'absolute')
     .style('padding', '4px 8px')
-    .style('background', 'white')
+    .style('background', 'grey')
     .style('border', '1px solid #ccc')
     .style('border-radius', '4px')
     .style('pointer-events', 'none')
-    .style('display', 'none');
+    .style('display', 'none')
+    .style('z-index', 9999);
 
   // --- Append circles ---
   let circles = svg
@@ -189,6 +191,7 @@ map.on('load', async () => {
       .data(filteredStations, (d) => d.short_name)
       .join('circle')
       .attr('r', (d) => radiusScale(d.totalTraffic))
+      .style('--departure-ratio', d => stationFlow(d.departures / d.totalTraffic))
       .on('mouseover', (event, d) => {
         tooltip
           .style('display', 'block')
