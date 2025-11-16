@@ -18,24 +18,26 @@ const map = new mapboxgl.Map({
   maxZoom: 18, // Maximum allowed zoom
 });
 
+let jsonData;  
+
 map.on('load', async () => {
   map.addSource('boston_route', {
-  type: 'geojson',
-  data: 'https://bostonopendata-boston.opendata.arcgis.com/datasets/boston::existing-bike-network-2022.geojson',
-});
+    type: 'geojson',
+    data: 'https://bostonopendata-boston.opendata.arcgis.com/datasets/boston::existing-bike-network-2022.geojson',
+  });
 
-map.addLayer({
-  id: 'bike-lanes',
-  type: 'line',
-  source: 'boston_route',
-  paint: {
-    'line-color': 'green',
-    'line-width': 3,
-    'line-opacity': 0.4,
-  },
-})
+  map.addLayer({
+    id: 'bike-lanes',
+    type: 'line',
+    source: 'boston_route',
+    paint: {
+      'line-color': 'green',
+      'line-width': 3,
+      'line-opacity': 0.4,
+    },
+  });
 
-// Cambridge
+  // Cambridge
   map.addSource('cambridge_route', {
     type: 'geojson',
     data: 'https://data.cambridgema.gov/api/geospatial/aqh5-83rt?method=export&format=GeoJSON',
@@ -52,22 +54,21 @@ map.addLayer({
     },
   });
 
-  let jsonData;
+  // Load Bluebikes station data
   try {
     const jsonurl = 'https://dsc106.com/labs/lab07/data/bluebikes-stations.json';
 
-    // Await JSON fetch
-    const jsonData = await d3.json(jsonurl);
+    // Assign to the OUTER variable (NO const here)
+    jsonData = await d3.json(jsonurl);
 
-    console.log('Loaded JSON Data:', jsonData); // Log to verify structure
+    console.log('Loaded JSON Data:', jsonData);
+
   } catch (error) {
-    console.error('Error loading JSON:', error); // Handle errors
+    console.error('Error loading JSON:', error);
   }
 
+  if (jsonData) {
+    const stations = jsonData.data.stations;
+    console.log("Stations Array:", stations);
+  }
 });
-
-let stations = jsonData.data.stations;
-console.log('Stations Array:', stations);
-
-
-
