@@ -4,7 +4,7 @@ html, body {
   height: 100%;
   width: 100%;
   display: flex;
-  flex-direction: column; /* stack header, map, legend */
+  flex-direction: column; 
   overflow: auto;
 }
 
@@ -26,12 +26,12 @@ html, body {
   width: 100%;
   height: 100%;
   z-index: 1;
-  pointer-events: none; /* keep map interactive */
+  pointer-events: none; 
 }
 
 #map svg circle {
   pointer-events: auto;
-  cursor: pointer; /* optional: shows hover */
+  cursor: pointer; 
 }
 
 #map circle,
@@ -43,13 +43,13 @@ html, body {
     var(--color-departures) calc(100% * var(--departure-ratio)),
     var(--color-arrivals)
   );
-  fill: var(--color); /* works for circles */
-  background-color: var(--color); /* needed for legend divs */
+  fill: var(--color); 
+  background-color: var(--color);
 }
 
 .legend {
   display: flex;
-  margin-block: 1em; /* spacing from map */
+  margin-block: 1em; 
   font-size: 0.9em;
   text-align: center;
   gap: 1px;
@@ -58,9 +58,9 @@ html, body {
 .legend > div {
   flex: 1;
   padding: 0.5em 1em;
-  color: white; /* text color for contrast */
+  color: white; 
   font-weight: bold;
-  border-radius: 4px 0 0 4px; /* first swatch rounded left */
+  border-radius: 4px 0 0 4px; 
 }
 
 .legend > div:nth-child(2) { border-radius: 0; }
