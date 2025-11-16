@@ -13,13 +13,11 @@ const map = new mapboxgl.Map({
   maxZoom: 18,
 });
 
-// Convert minutes since midnight → formatted HH:MM AM/PM
 function formatTime(minutes) {
   const date = new Date(0, 0, 0, 0, minutes);
   return date.toLocaleString('en-US', { timeStyle: 'short' });
 }
 
-// Compute station traffic (arrivals, departures, total)
 function computeStationTraffic(stations, trips) {
   const departures = d3.rollup(trips, (v) => v.length, (d) => d.start_station_id);
   const arrivals = d3.rollup(trips, (v) => v.length, (d) => d.end_station_id);
@@ -33,12 +31,10 @@ function computeStationTraffic(stations, trips) {
   });
 }
 
-// Convert Date → minutes since midnight
 function minutesSinceMidnight(date) {
   return date.getHours() * 60 + date.getMinutes();
 }
 
-// Filter trips by selected time (± 60 minutes)
 function filterTripsByTime(trips, timeFilter) {
   if (timeFilter === -1) return trips;
   return trips.filter((trip) => {
@@ -52,7 +48,6 @@ function filterTripsByTime(trips, timeFilter) {
 const stationFlow = d3.scaleQuantize().domain([0, 1]).range([0, 0.5, 1]);
 
 map.on('load', async () => {
-  // --- Bike lane layers ---
   map.addSource('boston_route', {
     type: 'geojson',
     data: 'https://bostonopendata-boston.opendata.arcgis.com/datasets/boston::existing-bike-network-2022.geojson',
@@ -103,7 +98,6 @@ map.on('load', async () => {
     .domain([0, d3.max(stations, (d) => d.totalTraffic)])
     .range([0, 25]);
 
-  // --- Tooltip div ---
   const tooltip = d3
     .select('body')
     .append('div')
@@ -117,7 +111,6 @@ map.on('load', async () => {
     .style('display', 'none')
     .style('z-index', 9999);
 
-  // --- Append circles ---
   let circles = svg
     .selectAll('circle')
     .data(stations, (d) => d.short_name)
@@ -159,7 +152,6 @@ map.on('load', async () => {
   map.on('resize', updatePositions);
   map.on('moveend', updatePositions);
 
-  // --- Slider filter ---
   const timeSlider = document.getElementById('time-slider');
   const selectedTime = document.getElementById('selected-time');
   const anyTimeLabel = document.getElementById('any-time');
